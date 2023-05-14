@@ -1,7 +1,11 @@
 import { MatchReader } from "./MatchReader";
 import { CsvFileReader } from "./CsvFileReader";
-import { MatchResult } from "./MatchResult";
+import { ConsoleReport } from "./reportTargets/ConsoleReport";
+import { WinsAnalysis } from "./analyzers/WinsAnalysis";
+import { Summary } from "./Summary";
+import { HtmlReport } from "./reportTargets/HtmlReport";
 
+// example of 'COMPOSITION':
 // Create an object that satisfies the 'DataReader' interface
 const csvFileReader = new CsvFileReader("football.csv");
 
@@ -10,6 +14,6 @@ const csvFileReader = new CsvFileReader("football.csv");
 const matchReader = new MatchReader(csvFileReader);
 matchReader.load();
 
+const summary = new Summary(new WinsAnalysis("Man United"), new HtmlReport());
 
-
-console.log(`Man United won ${manUnitedWins} games`);
+summary.buildAndPrintReport(matchReader.matches);
