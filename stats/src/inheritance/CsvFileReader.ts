@@ -1,10 +1,13 @@
 import fs from "fs";
 
-export class CsvFileReader {
+export abstract class CsvFileReader<T> {
   // an array of tuples
-  data: string[][] = [];
+  data: T[] = [];
 
   constructor(public filename: string) {}
+
+  // abstract siginfies that this method will be implemented by the child class
+  abstract mapRow(row: string[]): T;
 
   read(): void {
     this.data = fs
@@ -14,6 +17,7 @@ export class CsvFileReader {
       .split("\n")
       .map((row: string): string[] => {
         return row.split(",");
-      });
+      })
+      .map(this.mapRow);
   }
 }
